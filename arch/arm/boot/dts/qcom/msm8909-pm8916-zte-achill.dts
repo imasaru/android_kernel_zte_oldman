@@ -1,0 +1,137 @@
+/*
+ * Copyright (c) 2015, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/dts-v1/;
+
+#include "msm8909-pm8916-qrd-skut.dtsi"
+#include "zte-msm8909-pm8916-achill.dtsi"
+#include "msm8909-camera-sensor-zte-achill.dtsi"
+/ {
+	qcom,board-id= <0x1000b 100>;
+};
+
+&soc {
+	/*
+	 * DT node to add support for SMB358 charger and integrate
+	 * with VM-BMS
+	 */
+	i2c@78b8000 {
+		smb358_otg_vreg: smb358-charger@57 {
+			compatible = "qcom,smb358-charger";
+			reg = <0x57>;
+			interrupt-parent = <&msm_gpio>;
+			interrupts = <110 8>;
+			pinctrl-names = "default";
+			pinctrl-0 = <&smb_int_default>;
+
+			qcom,float-voltage-mv = <4350>;
+			qcom,recharge-mv = <100>;
+			regulator-name = "smb358_otg_vreg";
+			qcom,thermal-mitigation = <1500 700 600 0>;
+			qcom,fastchg-current-max-ma = <1500>;
+
+			qcom,disable-apsd;
+			qcom,bms-psy-name = "bms";
+			qcom,bms-controlled-charging;
+			qcom,iterm-disabled;
+			qcom,chg-inhibit-disabled;
+			qcom,chg-vadc = <&pm8916_vadc>;
+			qcom,chg-adc_tm = <&pm8916_adc_tm>;
+			qcom,irq-gpio = <&msm_gpio 110 0x00>;
+
+			qcom,using-pmic-therm;
+			qcom,hot-bat-decidegc = <500>;
+			qcom,cold-bat-decidegc = <0>;
+			qcom,bat-present-decidegc = <200>;
+			/*
+			 * Below properties are used for enable JEITA
+			 */
+			qcom,warm-bat-decidegc = <450>;
+			qcom,cool-bat-decidegc = <20>;
+			qcom,warm-bat-ma = <500>;
+			qcom,cool-bat-ma = <500>;
+			qcom,warm-bat-mv = <4000>;
+			qcom,cool-bat-mv = <4000>;
+			status = "ok";
+		};
+	};
+};
+
+
+/ {
+	qrd_batterydata: qcom,battery-data {
+		qcom,rpull-up-kohm = <0>;
+		qcom,vref-batt-therm = <1800000>;
+
+		#include "batterydata-qrd-skut-4v35-2300mah.dtsi"
+	};
+};
+
+
+&soc {
+        zte_misc {
+        	compatible = "zte-misc";
+		/* no battery switch for this project */
+		/*
+		    battery_switch {
+                	label = "battery_switch";
+                    gpios = <&pm8916_gpios 2 0x0>;
+                };
+		*/
+        };
+};
+
+&spmi_bus {
+
+	qcom,pm8916@0 {
+
+		qcom,charger {
+			status = "ok";
+			qcom,use-external-charger;
+		};
+
+		qcom,vmbms {
+			status = "ok";
+			qcom,battery-data = <&qrd_batterydata>;
+
+			qcom,v-cutoff-uv = <3400000>;
+			qcom,max-voltage-uv = <4350000>;
+			qcom,r-conn-mohm = <16>;
+			qcom,shutdown-soc-valid-limit = <100>;
+			qcom,low-soc-calculate-soc-threshold = <15>;
+			qcom,low-voltage-calculate-soc-ms = <1000>;
+			qcom,low-soc-calculate-soc-ms = <5000>;
+			qcom,calculate-soc-ms = <20000>;
+			qcom,volatge-soc-timeout-ms = <60000>;
+			qcom,low-voltage-threshold = <3450000>;
+			qcom,s3-ocv-tolerence-uv = <1200>;
+			qcom,s2-fifo-length = <5>;
+			qcom,low-soc-fifo-length = <2>;
+			qcom,bms-vadc = <&pm8916_vadc>;
+			qcom,bms-adc_tm = <&pm8916_adc_tm>;
+			qcom,pmic-revid = <&pm8916_revid>;
+
+			qcom,force-s3-on-suspend;
+			qcom,force-s2-in-charging;
+			qcom,report-charger-eoc;
+			qcom,resume-soc = <99>;
+		};
+	};
+
+	qcom,pm8916@1 {
+		qcom,vibrator@c000 {
+			qcom,vib-vtg-level-mV = <2700>;
+		};
+	};
+};
+

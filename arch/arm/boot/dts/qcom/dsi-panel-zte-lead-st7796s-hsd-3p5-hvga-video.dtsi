@@ -1,0 +1,106 @@
+/* Copyright (c) 2015, The Linux Foundation. All rights reserved.
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 2 and
+ * only version 2 as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+
+&mdss_mdp {
+	dsi_lead_st7796s_hsd_video: qcom,mdss_dsi_lead_st7796s_hsd_3p5_hvga_video {
+		qcom,mdss-dsi-panel-name = "zteLEAD(ST7796S)HSD_320*480_3.5Inch";
+		qcom,mdss-dsi-panel-controller = <&mdss_dsi0>;
+		qcom,mdss-dsi-panel-type = "dsi_video_mode";
+		qcom,cont-splash-enabled;
+		qcom,mdss-dsi-panel-destination = "display_1";
+		qcom,mdss-dsi-panel-framerate = <60>;
+		qcom,mdss-dsi-virtual-channel-id = <0>;
+		qcom,mdss-dsi-stream = <0>;
+		qcom,mdss-pan-physical-height-dimension = <110>;
+		qcom,mdss-pan-physical-width-dimension = <62>;
+		qcom,mdss-dsi-panel-width = <320>;
+		qcom,mdss-dsi-panel-height = <480>;
+		qcom,mdss-dsi-h-front-porch = <50>;
+		qcom,mdss-dsi-h-back-porch = <50>;
+		qcom,mdss-dsi-h-pulse-width = <4>;
+		qcom,mdss-dsi-h-sync-skew = <0>;
+		qcom,mdss-dsi-v-back-porch = <9>;
+		qcom,mdss-dsi-v-front-porch = <30>;
+		qcom,mdss-dsi-v-pulse-width = <2>;
+		qcom,mdss-dsi-h-left-border = <0>;
+		qcom,mdss-dsi-h-right-border = <0>;
+		qcom,mdss-dsi-v-top-border = <0>;
+		qcom,mdss-dsi-v-bottom-border = <0>;
+		qcom,mdss-dsi-bpp = <24>;
+		qcom,mdss-dsi-color-order = "rgb_swap_rgb";
+		qcom,mdss-dsi-underflow-color = <0xff>;
+		qcom,mdss-dsi-border-color = <0>;
+		qcom,mdss-dsi-on-command=[
+
+
+
+
+				39 01 00 00 00 00 02 3a 77
+				39 01 00 00 00 00 02 f0 c3
+				39 01 00 00 00 00 02 f0 96
+				//39 01 00 00 00 00 03 E5 50 A0
+				39 01 00 00 00 00 02 36 48
+				39 01 00 00 00 00 02 B4 01
+                               39 01 00 00 00 00 03 B9 02 C0
+				39 01 00 00 00 00 09 e8 40 8a 00 00 29 19 a5 33
+
+				/* do not need to close cabc, only modify gamma can make display color normal, start, 20160407 */
+                               39 01 00 00 00 00 0F e0 f0 03 08 0c 0d 19 37 44 49 2b 16 16 1c 20
+                               39 01 00 00 00 00 0F e1 f0 03 08 0c 0d 19 37 44 49 2b 16 16 1c 20
+				//39 01 00 00 00 00 02 e5 18  //zte_tzb add to disable cabc to make display color normal, 20160401
+				/* do not need to close cabc, only modify gamma can make display color normal, end, 20160407 */
+				39 01 00 00 00 00 03 e5 00 20 //set pwm 39.9kHz, 20160413
+
+				//39 01 00 00 00 00 02 51 ff
+				//39 01 00 00 00 00 02 53 2c
+				39 01 00 00 00 00 02 55 00 //zte_tzb modify to solve black screen problem in some ui when bl<=3
+
+				39 01 00 00 00 00 02 c2 A7
+                               39 01 00 00 00 00 02 c5 33
+
+				39 01 00 00 00 00 02 f0 3c
+				39 01 00 00 00 00 02 f0 69
+
+				05 01 00 00 78 00 02 11 00
+				05 01 00 00 05 00 02 29 00
+		];
+		qcom,mdss-dsi-off-command = [
+		05 01 00 00 0a 00 02 28 00
+		05 01 00 00 78 00 02 10 00];
+		qcom,mdss-dsi-on-command-state = "dsi_lp_mode";
+		qcom,mdss-dsi-off-command-state = "dsi_hs_mode";
+		qcom,mdss-dsi-h-sync-pulse = <1>;
+		qcom,mdss-dsi-traffic-mode = "burst_mode";
+		qcom,mdss-dsi-lane-map = "lane_map_0123";
+		qcom,mdss-dsi-bllp-eof-power-mode;
+		qcom,mdss-dsi-bllp-power-mode;
+		qcom,suspend-ulps-enabled;
+		qcom,mdss-dsi-lane-0-state;
+		//qcom,mdss-dsi-lane-1-state;
+		qcom,mdss-dsi-panel-timings = [66 14 0C 00 34 38 10 18 0E 03 04 00];
+		qcom,mdss-dsi-t-clk-post = <0x05>;
+		qcom,mdss-dsi-t-clk-pre = <0x16>;
+		qcom,mdss-dsi-bl-min-level = <1>;
+		qcom,mdss-dsi-bl-max-level = <255>;
+		qcom,mdss-dsi-dma-trigger = "trigger_sw";
+		qcom,mdss-dsi-mdp-trigger = "none";
+		qcom,mdss-dsi-bl-pmic-control-type = "bl_ctrl_dcs";
+		qcom,mdss-dsi-reset-sequence = <1 5>, <0 5>, <1 20>;
+		qcom,mdss-dsi-lp11-init;
+		qcom,mdss-dsi-init-delay-us = <7000>;
+	};
+};
+
+
+
+

@@ -1,0 +1,111 @@
+/* Copyright (c) 2014, The Linux Foundation. All rights reserved.
+*
+* This program is free software; you can redistribute it and/or modify
+* it under the terms of the GNU General Public License version 2 and
+* only version 2 as published by the Free Software Foundation.
+*
+* This program is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+* GNU General Public License for more details.
+*/
+
+//zte jiangfeng add for ssb1306b
+&rpm_bus {
+	rpm-regulator-ldoa10 {
+		status = "okay";
+		pm8916_l10: regulator-l10 {
+			regulator-min-microvolt = <1800000>;
+			regulator-max-microvolt = <2800000>;
+			qcom,init-voltage = <1800000>;
+			status = "okay";
+		};
+	};
+};
+//zte jiangfeng add for ssb1306b, end
+
+&soc {
+    	matrix_keypad: matrix_keypad@0 {
+			compatible = "gpio-matrix-keypad";
+			debounce-delay-ms = <15>;
+			col-scan-delay-us = <2>;
+			row-gpios = <&msm_gpio 95 0x0
+					&msm_gpio 96 0x0
+					&msm_gpio 98 0x0
+					&msm_gpio 111 0x0
+					&msm_gpio 112 0x0
+					&msm_gpio 28 0x0>;	
+			col-gpios = <&msm_gpio 2  0x0                 
+					&msm_gpio 3 0x0
+					&msm_gpio 27 0x0
+					&msm_gpio 32 0x0>;	
+			linux,keymap = <0x000000E4 0x0001000A 0x00020007 0x00030004
+				                 0x0100000B 0x01010009 0x01020006 0x01030003
+				                 0x020000E3 0x02010008 0x02020005 0x02030002
+				                 0x0300009E 0x030100D4 0x030200AC 0x030300A9
+				                 0x0400006C 0x04010069 0x04020064 0x0403006A
+				                 0x05000067 0x05010038 0x0502001C  >;          
+		};	
+
+	//zte jiangfeng add for ssb1306b
+	spi_0: spi@78ba000 {
+                compatible = "qcom,spi-qup-v2";
+                #address-cells = <1>;
+                #size-cells = <0>;
+                reg-names = "spi_physical";
+                reg = <0x78ba000 0x600>;
+                interrupt-names = "spi_irq";
+                interrupts = <0 100 0>;
+                spi-max-frequency = <19200000>;
+                pinctrl-names = "spi_default", "spi_sleep";
+                pinctrl-0 = <&spi0_default>;
+                pinctrl-1 = <&spi0_sleep>;
+                clocks = <&clock_gcc clk_gcc_blsp1_ahb_clk>,
+                         <&clock_gcc clk_gcc_blsp1_qup6_spi_apps_clk>;
+                clock-names = "iface_clk", "core_clk";
+                qcom,infinite-mode = <0>;
+                //qcom,use-bam;
+                qcom,use-pinctrl;
+                qcom,ver-reg-exists;
+                //qcom,bam-consumer-pipe-index = <14>;
+                //qcom,bam-producer-pipe-index = <15>;
+                qcom,master-id = <86>;
+                ssd1306b@0 {
+                        compatible = "solomon,ssd1306b-spi";
+                        reg = <0>;
+                        spi-max-frequency = <19200000>; 
+                        pinctrl-names = "ssd1306b_dc_high", "ssd1306b_dc_low", "ssd1306b_reset_high", "ssd1306b_reset_low";
+                        pinctrl-0 = <&ssd1306b_dc_high>;
+                        pinctrl-1 = <&ssd1306b_dc_low>;
+                        pinctrl-2 = <&ssd1306b_reset_high>;
+                        pinctrl-3 = <&ssd1306b_reset_low>;
+                        vdd-supply = <&pm8916_l10>;
+                };
+	};
+	//zte jiangfeng add for ssb1306b, end
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
